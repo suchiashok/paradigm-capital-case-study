@@ -24,11 +24,7 @@ const filteredTrades = computed(() => {
     <h2>Trade Summary Section</h2>
 
     <!-- Search Bar -->
-    <input
-      type="text"
-      v-model="searchQuery"
-      placeholder="Search by ticker"
-    />
+    <input type="text" v-model="searchQuery" placeholder="Search by ticker" />
 
     <!-- If no search query is entered, show the search message -->
     <div v-if="!searchQuery && !isFetching">
@@ -42,11 +38,24 @@ const filteredTrades = computed(() => {
         v-for="(trade, index) in filteredTrades"
         :key="index"
       >
-        <h3>{{ trade.ticker }}</h3>
-        <p><strong>Full Ticker:</strong> {{ trade.full_ticker }}</p>
-        <p><strong>Quantity</strong> {{ trade.quantity }}</p>
-        <p><strong>Price</strong> {{ trade.price }}</p>
-        <p><strong>Date</strong> {{ trade.date }}</p>
+        <h3>{{ trade.ticker }} ({{ trade.full_ticker }})</h3>
+        <p><strong>Date of the Transaction:</strong> {{ trade.date }}</p>
+        <p><strong>Quantity Bought/Sold:</strong> {{ trade.quantity }}</p>
+        <p><strong>Price per share:</strong> {{ trade.price }}</p>
+        <p><strong>Type of Transaction:</strong> {{ trade.side }}</p>
+        <h4>
+          Commission Details (Commission Type: {{ trade.commission_type }})
+        </h4>
+        <p>
+          <strong>Commission amount per share:</strong> ${{
+            trade.commission_amount
+          }}
+        </p>
+        <p>
+          <strong>Total Commission:</strong> ${{ trade.commission }} (for
+          {{ trade.quantity }} shares)
+        </p>
+        <p><strong></strong></p>
       </div>
     </div>
 

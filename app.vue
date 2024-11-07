@@ -1,10 +1,11 @@
 <script setup>
-import ClientComp from './components/clientComp.vue';
-import TradeComp from './components/tradeComp.vue';
+import ClientComp from "./components/clientComp.vue";
+import TradeComp from "./components/tradeComp.vue";
 </script>
 
 <template>
-  <ClientComp />
-  <TradeComp />
+  <div>
+    <ClientComp />
+    <TradeComp />
+  </div>
 </template>
-

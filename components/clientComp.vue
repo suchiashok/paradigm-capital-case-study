@@ -43,10 +43,16 @@ const filteredClients = computed(() => {
         :key="index"
       >
         <h3>{{ client.company_name }}</h3>
-        <p><strong>Company Type:</strong> {{ client.company_type }}</p>
+        <p><strong>Type of the Company:</strong> {{ client.company_type }}</p>
         <p><strong>Location:</strong> {{ client.location }}</p>
         <p><strong>Total AUM:</strong> {{ client.total_aum }}</p>
         <p><strong>Risk Profile:</strong> {{ client.risk_profile }}</p>
+        <h4>Contact Details</h4>
+        <p>
+          <strong>Name & Title:</strong> {{ client.contact_name }} -
+          {{ client.title }}
+        </p>
+        <p><strong>Phone:</strong>{{ client.contact_phone }}</p>
       </div>
     </div>
 
