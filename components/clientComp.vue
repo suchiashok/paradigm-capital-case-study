@@ -1,27 +1,63 @@
 <script setup>
+import { ref, computed } from "vue";
 import { useFetch } from "#app";
 
-const { data: clientData, error } = useFetch(
-  () => `https://paradigmapi.pythonanywhere.com/api/clients/8`
-);
+const searchQuery = ref("");
 
-console.log(clientData);
+const {
+  data: clientData,
+  error,
+  isFetching,
+} = useFetch("https://paradigmapi.pythonanywhere.com/api/clients");
+
+const filteredClients = computed(() => {
+  if (!clientData.value) return []; // No clients available
+  if (!searchQuery.value) return []; // No search query entered, show nothing
+  return clientData.value?.items.filter((client) =>
+    client.company_name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
 </script>
 
 <template>
   <div>
-    <h2>Client Data</h2>
-    <div v-if="clientData">
-      <p>Company Name: {{ clientData.company_name }}</p>
-      <p>Company Type: {{ clientData.company_type }}</p>
-      <p>Location: {{ clientData.location }}</p>
+    <h2>Client Summary Section</h2>
+
+    <!-- Search Bar -->
+    <input
+      type="text"
+      v-model="searchQuery"
+      placeholder="Search by Company Name"
+    />
+
+    <!-- If no search query is entered, show the search message -->
+    <div v-if="!searchQuery && !isFetching">
+      <p>Search for clients</p>
     </div>
 
+    <!-- Display filtered client cards -->
+    <div v-if="!isFetching && filteredClients.length > 0">
+      <div
+        class="client-card"
+        v-for="(client, index) in filteredClients"
+        :key="index"
+      >
+        <h3>{{ client.company_name }}</h3>
+        <p><strong>Company Type:</strong> {{ client.company_type }}</p>
+        <p><strong>Location:</strong> {{ client.location }}</p>
+        <p><strong>Total AUM:</strong> {{ client.total_aum }}</p>
+        <p><strong>Risk Profile:</strong> {{ client.risk_profile }}</p>
+      </div>
+    </div>
+
+    <!-- Display error message if there's an error -->
     <div v-else-if="error">
       <p>Something went wrong: {{ error.message }}</p>
     </div>
+
+    <!-- Loading state -->
     <div v-else>
-      <p>Loading</p>
+      <p>Loading...</p>
     </div>
   </div>
-  </template>
+</template>
