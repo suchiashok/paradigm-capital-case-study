@@ -5,20 +5,27 @@ import { useFetch } from "#app";
 const searchQuery = ref("");
 const quantityFilter = ref({ min: 0, max: Infinity });
 const priceFilter = ref({ min: 0, max: Infinity });
+const commissionFilter = ref({ min: 0, max: Infinity });
 const quantityRanges = [
   { label: "<1000", min: 0, max: 999 },
   { label: "1000-1999", min: 1000, max: 1999 },
   { label: "2000-2999", min: 2000, max: 2999 },
   { label: "3000-3999", min: 3000, max: 3999 },
-  { label: ">=4000", min: 4000, max: Infinity },
+  { label: ">4000", min: 4000, max: Infinity },
 ];
 const priceRanges = [
   { label: "<50", min: 0, max: 49 },
   { label: "50-99", min: 50, max: 99 },
   { label: ">100", min: 100, max: Infinity },
 ];
+const commissionRanges = [
+  { label: "<50", min: 0, max: 49 },
+  { label: "50-349", min: 50, max: 349 },
+  { label: ">350", min: 350, max: Infinity },
+];
 const selectedQuantityRange = ref("");
 const selectedPriceRange = ref("");
+const selectedCommissionRange = ref("");
 
 const {
   data: tradeData,
@@ -70,10 +77,14 @@ const filteredTrades = computed(() => {
     const maxQuantity = quantityFilter.value?.max ?? Infinity;
     const minPrice = priceFilter.value?.min ?? 0;
     const maxPrice = priceFilter.value?.max ?? Infinity;
+    const minCommission = commissionFilter.value?.min ?? 0;
+    const maxCommission = commissionFilter.value?.max ?? Infinity;
     const matchesQuantity =
       trade.quantity >= minQuantity && trade.quantity <= maxQuantity;
     const matchesPrice = trade.price >= minPrice && trade.price <= maxPrice;
-    return matchesQuery && matchesQuantity && matchesPrice;
+    const matchesCommission =
+      trade.commission >= minCommission && trade.commission <= maxCommission;
+    return matchesQuery && matchesQuantity && matchesPrice && matchesCommission;
   });
 });
 
@@ -92,6 +103,11 @@ function updateQuantityFilter(label) {
 function updatePriceFilter(label) {
   const range = priceRanges.find((r) => r.label === label);
   priceFilter.value = range || { min: 0, max: Infinity };
+}
+
+function updateCommissionFilter(label) {
+  const range = commissionRanges.find((r) => r.label === label);
+  commissionFilter.value = range || { min: 0, max: Infinity };
 }
 </script>
 
@@ -121,6 +137,14 @@ function updatePriceFilter(label) {
         :options="quantityRanges.map((range) => range.label)"
         class="dashboard__filter"
         @change="updateQuantityFilter"
+      />
+
+      <USelect
+        v-model="selectedCommissionRange"
+        placeholder="Filter by total commission"
+        :options="commissionRanges.map((range) => range.label)"
+        class="dashboard__filter"
+        @change="updateCommissionFilter"
       />
 
       <!-- Display filtered client cards -->
