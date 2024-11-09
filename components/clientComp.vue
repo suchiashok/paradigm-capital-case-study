@@ -163,7 +163,7 @@ const resetFilters = () => {
 
       <!-- Loading state -->
       <div v-else>
-        <p>Loading...</p>
+        <p>No Data</p>
       </div>
 
       <!-- Pagination-->
@@ -182,10 +182,6 @@ const resetFilters = () => {
   padding: 20px
   width: 66%
 
-.dashboard__table
-  width: 66%
-  height: 300px
-
 .dashboard__mainTable
   margin-top: 1rem
   margin-bottom: 1rem
@@ -198,7 +194,6 @@ const resetFilters = () => {
 .dashboard__filter
   width: 20%
   display: flex
-  flex: -1
 
 .dashboard__tableCard
   display: flex

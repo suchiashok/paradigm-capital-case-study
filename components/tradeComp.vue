@@ -100,6 +100,13 @@ const rows = computed(() =>
   )
 );
 
+const resetFilters = () => {
+  searchQuery.value = "";
+  selectedQuantityRange.value = "";
+  selectedPriceRange.value = "";
+  selectedCommissionRange.value = "";
+};
+
 function updateQuantityFilter(label) {
   const range = quantityRanges.find((r) => r.label === label);
   quantityFilter.value = range || { min: 0, max: Infinity };
@@ -121,36 +128,46 @@ function updateCommissionFilter(label) {
     <UContainer :style="{ margin: 0 }">
       <h2 class="dashboard__header">Trades Dashboard</h2>
 
-      <!-- Search Bar -->
-      <UInput
-        v-model="searchQuery"
-        class="dashboard__input"
-        placeholder="Search for ticker"
-      />
+      <!-- Filters -->
+      <UCard class="dashboard__tableCard">
+        <div class="dashboard__filters">
+          <UInput
+            v-model="searchQuery"
+            class="dashboard__filter"
+            placeholder="Search for ticker"
+          />
 
-      <USelect
-        v-model="selectedPriceRange"
-        placeholder="Filter by price"
-        :options="priceRanges.map((range) => range.label)"
-        class="dashboard__filter"
-        @change="updatePriceFilter"
-      />
+          <USelect
+            v-model="selectedPriceRange"
+            placeholder="Filter by price"
+            :options="priceRanges.map((range) => range.label)"
+            class="dashboard__filter"
+            @change="updatePriceFilter"
+          />
 
-      <USelect
-        v-model="selectedQuantityRange"
-        placeholder="Filter by quantity"
-        :options="quantityRanges.map((range) => range.label)"
-        class="dashboard__filter"
-        @change="updateQuantityFilter"
-      />
+          <USelect
+            v-model="selectedQuantityRange"
+            placeholder="Filter by quantity"
+            :options="quantityRanges.map((range) => range.label)"
+            class="dashboard__filter"
+            @change="updateQuantityFilter"
+          />
 
-      <USelect
-        v-model="selectedCommissionRange"
-        placeholder="Filter by total commission"
-        :options="commissionRanges.map((range) => range.label)"
-        class="dashboard__filter"
-        @change="updateCommissionFilter"
-      />
+          <USelect
+            v-model="selectedCommissionRange"
+            placeholder="Filter by total commission"
+            :options="commissionRanges.map((range) => range.label)"
+            class="dashboard__filter"
+            @change="updateCommissionFilter"
+          />
+        </div>
+
+        <div class="dashboard__button">
+          <UButton @click="resetFilters" color="green" variant="outline">
+            Reset Filters
+          </UButton>
+        </div>
+      </UCard>
 
       <!-- Display filtered client cards -->
       <div
@@ -160,7 +177,7 @@ function updateCommissionFilter(label) {
         <UTable
           :columns="displayedColumns"
           :rows="rows"
-          class="dashboard__table"
+          class="w-full"
         />
       </div>
 
@@ -171,7 +188,7 @@ function updateCommissionFilter(label) {
 
       <!-- Loading state -->
       <div v-else>
-        <p>Loading...</p>
+        <p>No Data</p>
       </div>
 
       <!-- Pagination-->
@@ -190,15 +207,9 @@ function updateCommissionFilter(label) {
   padding: 20px
   width: 66%
 
-.dashboard__table
-  height: 300px
-
 .dashboard__mainTable
   margin-top: 1rem
   margin-bottom: 1rem
-
-.dashboard__input
-  width: 30%
 
 .dashboard__header
   font: 2em sans-serif
@@ -207,7 +218,23 @@ function updateCommissionFilter(label) {
 
 .dashboard__filter
   width: 20%
-  margin-top: 1rem
   display: flex
-  flex-direction: right
+
+.dashboard__tableCard
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+
+.dashboard__filters
+  display: flex
+  gap: 1rem
+
+.dashboard__filter
+  width: 40%
+  margin-top: 1rem
+
+.dashboard__button
+  display: flex
+  padding-top: 1em
+  justify-content: flex-end
 </style>
