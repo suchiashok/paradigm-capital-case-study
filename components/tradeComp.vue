@@ -63,6 +63,11 @@ const displayedColumns = [
     label: "Total Commission",
     sortable: true,
   },
+  {
+    key: "date",
+    label: "Date of Transaction",
+    sortable: true,
+  },
 ];
 
 const page = ref(1);
@@ -181,11 +186,11 @@ function updateCommissionFilter(label) {
 
 <style lang="sass" scoped>
 .dashboard
-  border: 2px solid white
+  border: 2px solid #00DC82
   padding: 20px
+  width: 66%
 
 .dashboard__table
-  width: 66%
   height: 300px
 
 .dashboard__mainTable

@@ -1,10 +1,15 @@
 <script setup>
 import { ref, computed } from "vue";
-import { useFetch } from "#app";
+import { useFetch, useRouter } from "#app";
 
 const searchQuery = ref("");
 const riskProfileFilter = ref("");
 const companyTypeFilter = ref("");
+
+const router = useRouter();
+const navigateToClient = (clientId) => {
+  router.push(`/clients/${clientId}`);
+};
 
 const {
   data: clientData,
@@ -34,6 +39,7 @@ const displayedColumns = [
   {
     key: "total_aum",
     label: "Total AUM",
+    sortable: true,
   },
   {
     key: "risk_profile",
@@ -76,23 +82,18 @@ const filteredClients = computed(() => {
   });
 });
 
-// const clientsDataDisplay = computed(() =>
-//   filteredClients.value.map((client) =>
-//     displayedColumns
-//       .map((e) => e.key)
-//       .reduce((result, column) => {
-//         result[column] = client[column];
-//         return result;
-//       }, {})
-//   )
-// );
-
 const rows = computed(() =>
   filteredClients.value.slice(
     (page.value - 1) * pageCount,
     page.value * pageCount
   )
 );
+
+const resetFilters = () => {
+  searchQuery.value = "";
+  riskProfileFilter.value = "";
+  companyTypeFilter.value = "";
+};
 </script>
 
 <template>
@@ -100,26 +101,43 @@ const rows = computed(() =>
     <UContainer :style="{ margin: 0 }">
       <h2 class="dashboard__header">Client Dashboard</h2>
 
-      <!-- Search Bar -->
-      <UInput
-        v-model="searchQuery"
-        class="dashboard__input"
-        placeholder="Search for clients"
-      />
+      <!-- Filters -->
+      <UCard class="dashboard__tableCard">
+        <div class="dashboard__filters">
+          <UInput
+            v-model="searchQuery"
+            class="dashboard__filter"
+            placeholder="Search for clients"
+          />
 
-      <USelect
-        v-model="riskProfileFilter"
-        placeholder="Filter by risk profile"
-        :options="['Low', 'Moderate', 'High']"
-        class="dashboard__filter"
-      />
+          <USelect
+            v-model="riskProfileFilter"
+            placeholder="Filter by risk profile"
+            :options="['Low', 'Moderate', 'High']"
+            class="dashboard__filter"
+          />
 
-      <USelect
-        v-model="companyTypeFilter"
-        placeholder="Filter by company type"
-        :options="['Financial Institution', 'Investment Advisor', 'Hedge Fund']"
-        class="dashboard__filter"
-      />
+          <USelect
+            v-model="companyTypeFilter"
+            placeholder="Filter by company type"
+            :options="[
+              'Financial Institution',
+              'Investment Advisor',
+              'Hedge Fund',
+            ]"
+            class="dashboard__filter"
+          />
+        </div>
+        <div class="dashboard__button">
+          <UButton
+            @click="resetFilters"
+            color="green"
+            variant="outline"
+          >
+            Reset Filters
+          </UButton>
+        </div>
+      </UCard>
 
       <!-- Display filtered client cards -->
       <div
@@ -129,8 +147,7 @@ const rows = computed(() =>
         <UTable :columns="displayedColumns" :rows="rows" class="w-full">
           <template #actions-data="{ row }">
             <UButton
-              @click="() => $router.push(`/clients/${row.id}`)"
-              v-if="true"
+              @click="navigateToClient(row.id)"
               icon="oi:account-login"
               color="emerald"
               variant="outline"
@@ -161,7 +178,7 @@ const rows = computed(() =>
 
 <style lang="sass" scoped>
 .dashboard
-  border: 2px solid white
+  border: 2px solid #00DC82
   padding: 20px
   width: 66%
 
@@ -173,9 +190,6 @@ const rows = computed(() =>
   margin-top: 1rem
   margin-bottom: 1rem
 
-.dashboard__input
-  width: 30%
-
 .dashboard__header
   font: 2em sans-serif
   padding-bottom: 1rem
@@ -183,7 +197,24 @@ const rows = computed(() =>
 
 .dashboard__filter
   width: 20%
-  margin-top: 1rem
   display: flex
-  flex-direction: right
+  flex: -1
+
+.dashboard__tableCard
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+
+.dashboard__filters
+  display: flex
+  gap: 1rem
+
+.dashboard__filter
+  width: 40%
+  margin-top: 1rem
+
+.dashboard__button
+  display: flex
+  padding-top: 1em
+  justify-content: flex-end
 </style>
