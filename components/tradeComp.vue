@@ -3,7 +3,15 @@ import { ref, computed } from "vue";
 import { useFetch } from "#app";
 
 const searchQuery = ref("");
-const quantityFilter = ref("");
+const quantityFilter = ref({ min: 0, max: Infinity });
+const quantityRanges = [
+  { label: "<1000", min: 0, max: 1000 },
+  { label: "1000-1999", min: 1000, max: 1999 },
+  { label: "2000-2999", min: 2000, max: 2999 },
+  { label: "3000-3999", min: 3000, max: 3999 },
+  { label: ">=4000", min: 4000, max: Infinity },
+];
+const selectedQuantityRange = ref("");
 
 const {
   data: tradeData,
@@ -12,12 +20,35 @@ const {
 } = useFetch("https://paradigmapi.pythonanywhere.com/api/trades");
 
 const displayedColumns = [
-  "ticker",
-  "date",
-  "quantity",
-  "price",
-  "side",
-  "commission",
+  {
+    key: "id",
+    label: "ID",
+  },
+  {
+    key: "ticker",
+    label: "Ticker",
+    sortable: true,
+  },
+  {
+    key: "quantity",
+    label: "Quantity",
+    sortable: true,
+  },
+  {
+    key: "price",
+    label: "Price",
+    sortable: true,
+  },
+  {
+    key: "commission_amount",
+    label: "Commission Amount (PER)",
+    sortable: true,
+  },
+  {
+    key: "commission",
+    label: "Total Commission",
+    sortable: true,
+  },
 ];
 
 const page = ref(1);
@@ -28,28 +59,25 @@ const filteredTrades = computed(() => {
     const matchesQuery = trade.ticker
       .toLowerCase()
       .includes(searchQuery.value.toLowerCase());
-    // const matchesQuantity = quantityFilter.value
-    //   ? trade.quantity.toLowerCase() === quantityFilter.value.toLowerCase()
-    //   : true;
-    return matchesQuery 
+    const minQuantity = quantityFilter.value?.min ?? 0;
+    const maxQuantity = quantityFilter.value?.max ?? Infinity;
+    const matchesQuantity =
+      trade.quantity >= minQuantity && trade.quantity <= maxQuantity;
+    return matchesQuery && matchesQuantity;
   });
 });
 
-const tradesDataDisplay = computed(() =>
-  filteredTrades.value.map((trade) =>
-    displayedColumns.reduce((result, column) => {
-      result[column] = trade[column];
-      return result;
-    }, {})
-  )
-);
-
 const rows = computed(() =>
-  tradesDataDisplay.value.slice(
+  filteredTrades.value.slice(
     (page.value - 1) * pageCount,
     page.value * pageCount
   )
 );
+
+function updateQuantityFilter(label) {
+  const range = quantityRanges.find((r) => r.label === label);
+  quantityFilter.value = range || { min: 0, max: Infinity };
+}
 </script>
 
 <template>
@@ -64,12 +92,24 @@ const rows = computed(() =>
         placeholder="Search for ticker"
       />
 
+      <USelect
+        v-model="selectedQuantityRange"
+        placeholder="Filter by quantity"
+        :options="quantityRanges.map((range) => range.label)"
+        class="dashboard__filter"
+        @change="updateQuantityFilter"
+      />
+
       <!-- Display filtered client cards -->
       <div
         class="dashboard__mainTable"
         v-if="!isFetching && filteredTrades.length > 0"
       >
-        <UTable :rows="rows" class="dashboard__table" />
+        <UTable
+          :columns="displayedColumns"
+          :rows="rows"
+          class="dashboard__table"
+        />
       </div>
 
       <!-- Display error message if there's an error -->
@@ -86,7 +126,7 @@ const rows = computed(() =>
       <UPagination
         v-model="page"
         :page-count="pageCount"
-        :total="tradesDataDisplay.length"
+        :total="filteredTrades.length"
       />
     </UContainer>
   </div>

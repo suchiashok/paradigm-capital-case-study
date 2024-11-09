@@ -13,11 +13,47 @@ const {
 } = useFetch("https://paradigmapi.pythonanywhere.com/api/clients");
 
 const displayedColumns = [
-  "company_name",
-  "company_type",
-  "location",
-  "total_aum",
-  "risk_profile",
+  {
+    key: "id",
+    label: "ID",
+  },
+  {
+    key: "company_name",
+    label: "Company Name",
+    sortable: true,
+  },
+  {
+    key: "company_type",
+    label: "Type",
+    sortable: true,
+  },
+  {
+    key: "location",
+    label: "Location",
+  },
+  {
+    key: "total_aum",
+    label: "Total AUM",
+  },
+  {
+    key: "risk_profile",
+    label: "Risk Profile",
+  },
+  {
+    key: "actions",
+    label: "Actions",
+    sortable: false,
+  },
+];
+
+const actions = [
+  [
+    {
+      key: "view",
+      label: "Action",
+      icon: "oi:account-login",
+    },
+  ],
 ];
 
 const page = ref(1);
@@ -40,17 +76,19 @@ const filteredClients = computed(() => {
   });
 });
 
-const clientsDataDisplay = computed(() =>
-  filteredClients.value.map((client) =>
-    displayedColumns.reduce((result, column) => {
-      result[column] = client[column];
-      return result;
-    }, {})
-  )
-);
+// const clientsDataDisplay = computed(() =>
+//   filteredClients.value.map((client) =>
+//     displayedColumns
+//       .map((e) => e.key)
+//       .reduce((result, column) => {
+//         result[column] = client[column];
+//         return result;
+//       }, {})
+//   )
+// );
 
 const rows = computed(() =>
-  clientsDataDisplay.value.slice(
+  filteredClients.value.slice(
     (page.value - 1) * pageCount,
     page.value * pageCount
   )
@@ -71,18 +109,15 @@ const rows = computed(() =>
 
       <USelect
         v-model="riskProfileFilter"
-        :options="['Filter by risk profile', 'Low', 'Moderate', 'High']"
+        placeholder="Filter by risk profile"
+        :options="['Low', 'Moderate', 'High']"
         class="dashboard__filter"
       />
 
       <USelect
         v-model="companyTypeFilter"
-        :options="[
-          'Filter by company type',
-          'Financial Institution',
-          'Investment Advisor',
-          'Hedge Fund',
-        ]"
+        placeholder="Filter by company type"
+        :options="['Financial Institution', 'Investment Advisor', 'Hedge Fund']"
         class="dashboard__filter"
       />
 
@@ -91,7 +126,17 @@ const rows = computed(() =>
         class="dashboard__mainTable"
         v-if="!isFetching && filteredClients.length > 0"
       >
-        <UTable :rows="rows" class="dashboard__table" />
+        <UTable :columns="displayedColumns" :rows="rows" class="w-full">
+          <template #actions-data="{ row }">
+            <UButton
+              @click="() => $router.push(`/clients/${row.id}`)"
+              v-if="true"
+              icon="oi:account-login"
+              color="emerald"
+              variant="outline"
+            />
+          </template>
+        </UTable>
       </div>
 
       <!-- Display error message if there's an error -->
@@ -108,7 +153,7 @@ const rows = computed(() =>
       <UPagination
         v-model="page"
         :page-count="pageCount"
-        :total="clientsDataDisplay.length"
+        :total="filteredClients.length"
       />
     </UContainer>
   </div>
@@ -118,6 +163,7 @@ const rows = computed(() =>
 .dashboard
   border: 2px solid white
   padding: 20px
+  width: 66%
 
 .dashboard__table
   width: 66%
