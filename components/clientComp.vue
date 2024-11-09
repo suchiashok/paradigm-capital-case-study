@@ -60,7 +60,7 @@ const rows = computed(() =>
 <template>
   <div class="dashboard">
     <UContainer :style="{ margin: 0 }">
-      <h2 class="dashboard_header">Client Dashboard</h2>
+      <h2 class="dashboard__header">Client Dashboard</h2>
 
       <!-- Search Bar -->
       <UInput
@@ -128,9 +128,9 @@ const rows = computed(() =>
   margin-bottom: 1rem
 
 .dashboard__input
-  width:66%
+  width: 30%
 
-.dashboard_header
+.dashboard__header
   font: 2em sans-serif
   padding-bottom: 1rem
   text-align: center

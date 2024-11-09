@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { useFetch } from "#app";
 
 const searchQuery = ref("");
+const quantityFilter = ref("");
 
 const {
   data: tradeData,
@@ -10,63 +11,111 @@ const {
   isFetching,
 } = useFetch("https://paradigmapi.pythonanywhere.com/api/trades");
 
+const displayedColumns = [
+  "ticker",
+  "date",
+  "quantity",
+  "price",
+  "side",
+  "commission",
+];
+
+const page = ref(1);
+const pageCount = 5;
+
 const filteredTrades = computed(() => {
-  if (!tradeData.value) return []; // No clients available
-  if (!searchQuery.value) return []; // No search query entered, show nothing
-  return tradeData.value?.items.filter((trade) =>
-    trade.ticker.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
+  return tradeData?.value?.items.filter((trade) => {
+    const matchesQuery = trade.ticker
+      .toLowerCase()
+      .includes(searchQuery.value.toLowerCase());
+    // const matchesQuantity = quantityFilter.value
+    //   ? trade.quantity.toLowerCase() === quantityFilter.value.toLowerCase()
+    //   : true;
+    return matchesQuery 
+  });
 });
+
+const tradesDataDisplay = computed(() =>
+  filteredTrades.value.map((trade) =>
+    displayedColumns.reduce((result, column) => {
+      result[column] = trade[column];
+      return result;
+    }, {})
+  )
+);
+
+const rows = computed(() =>
+  tradesDataDisplay.value.slice(
+    (page.value - 1) * pageCount,
+    page.value * pageCount
+  )
+);
 </script>
 
 <template>
-  <div>
-    <h2>Trade Summary Section</h2>
+  <div class="dashboard">
+    <UContainer :style="{ margin: 0 }">
+      <h2 class="dashboard__header">Trades Dashboard</h2>
 
-    <!-- Search Bar -->
-    <input type="text" v-model="searchQuery" placeholder="Search by ticker" />
+      <!-- Search Bar -->
+      <UInput
+        v-model="searchQuery"
+        class="dashboard__input"
+        placeholder="Search for ticker"
+      />
 
-    <!-- If no search query is entered, show the search message -->
-    <div v-if="!searchQuery && !isFetching">
-      <p>Search for trades</p>
-    </div>
-
-    <!-- Display filtered client cards -->
-    <div v-if="!isFetching && filteredTrades.length > 0">
+      <!-- Display filtered client cards -->
       <div
-        class="trade-card"
-        v-for="(trade, index) in filteredTrades"
-        :key="index"
+        class="dashboard__mainTable"
+        v-if="!isFetching && filteredTrades.length > 0"
       >
-        <h3>{{ trade.ticker }} ({{ trade.full_ticker }})</h3>
-        <p><strong>Date of the Transaction:</strong> {{ trade.date }}</p>
-        <p><strong>Quantity Bought/Sold:</strong> {{ trade.quantity }}</p>
-        <p><strong>Price per share:</strong> {{ trade.price }}</p>
-        <p><strong>Type of Transaction:</strong> {{ trade.side }}</p>
-        <h4>
-          Commission Details (Commission Type: {{ trade.commission_type }})
-        </h4>
-        <p>
-          <strong>Commission amount per share:</strong> ${{
-            trade.commission_amount
-          }}
-        </p>
-        <p>
-          <strong>Total Commission:</strong> ${{ trade.commission }} (for
-          {{ trade.quantity }} shares)
-        </p>
-        <p><strong></strong></p>
+        <UTable :rows="rows" class="dashboard__table" />
       </div>
-    </div>
 
-    <!-- Display error message if there's an error -->
-    <div v-else-if="error">
-      <p>Something went wrong: {{ error.message }}</p>
-    </div>
+      <!-- Display error message if there's an error -->
+      <div v-else-if="error">
+        <p>Something went wrong</p>
+      </div>
 
-    <!-- Loading state -->
-    <div v-else>
-      <p>Loading...</p>
-    </div>
+      <!-- Loading state -->
+      <div v-else>
+        <p>Loading...</p>
+      </div>
+
+      <!-- Pagination-->
+      <UPagination
+        v-model="page"
+        :page-count="pageCount"
+        :total="tradesDataDisplay.length"
+      />
+    </UContainer>
   </div>
 </template>
+
+<style lang="sass" scoped>
+.dashboard
+  border: 2px solid white
+  padding: 20px
+
+.dashboard__table
+  width: 66%
+  height: 300px
+
+.dashboard__mainTable
+  margin-top: 1rem
+  margin-bottom: 1rem
+
+.dashboard__input
+  width: 30%
+
+.dashboard__header
+  font: 2em sans-serif
+  padding-bottom: 1rem
+  text-align: center
+
+.dashboard__filter
+  width: 20%
+  margin-top: 1rem
+  display: flex
+  flex-direction: right
+</style>
