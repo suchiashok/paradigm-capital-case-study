@@ -4,14 +4,21 @@ import { useFetch } from "#app";
 
 const searchQuery = ref("");
 const quantityFilter = ref({ min: 0, max: Infinity });
+const priceFilter = ref({ min: 0, max: Infinity });
 const quantityRanges = [
-  { label: "<1000", min: 0, max: 1000 },
+  { label: "<1000", min: 0, max: 999 },
   { label: "1000-1999", min: 1000, max: 1999 },
   { label: "2000-2999", min: 2000, max: 2999 },
   { label: "3000-3999", min: 3000, max: 3999 },
   { label: ">=4000", min: 4000, max: Infinity },
 ];
+const priceRanges = [
+  { label: "<50", min: 0, max: 49 },
+  { label: "50-99", min: 50, max: 99 },
+  { label: ">100", min: 100, max: Infinity },
+];
 const selectedQuantityRange = ref("");
+const selectedPriceRange = ref("");
 
 const {
   data: tradeData,
@@ -61,9 +68,12 @@ const filteredTrades = computed(() => {
       .includes(searchQuery.value.toLowerCase());
     const minQuantity = quantityFilter.value?.min ?? 0;
     const maxQuantity = quantityFilter.value?.max ?? Infinity;
+    const minPrice = priceFilter.value?.min ?? 0;
+    const maxPrice = priceFilter.value?.max ?? Infinity;
     const matchesQuantity =
       trade.quantity >= minQuantity && trade.quantity <= maxQuantity;
-    return matchesQuery && matchesQuantity;
+    const matchesPrice = trade.price >= minPrice && trade.price <= maxPrice;
+    return matchesQuery && matchesQuantity && matchesPrice;
   });
 });
 
@@ -78,6 +88,11 @@ function updateQuantityFilter(label) {
   const range = quantityRanges.find((r) => r.label === label);
   quantityFilter.value = range || { min: 0, max: Infinity };
 }
+
+function updatePriceFilter(label) {
+  const range = priceRanges.find((r) => r.label === label);
+  priceFilter.value = range || { min: 0, max: Infinity };
+}
 </script>
 
 <template>
@@ -90,6 +105,14 @@ function updateQuantityFilter(label) {
         v-model="searchQuery"
         class="dashboard__input"
         placeholder="Search for ticker"
+      />
+
+      <USelect
+        v-model="selectedPriceRange"
+        placeholder="Filter by price"
+        :options="priceRanges.map((range) => range.label)"
+        class="dashboard__filter"
+        @change="updatePriceFilter"
       />
 
       <USelect
