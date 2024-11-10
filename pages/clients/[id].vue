@@ -89,6 +89,14 @@ const resetFilters = () => {
   sideFilter.value = "";
   commTypeFilter.value = "";
 };
+
+const totalCommission = computed(() => {
+  const sum = filteredClientTrades.value.reduce((sum, trade) => {
+    const commission = parseFloat(trade.commission_amount);
+    return sum + (isNaN(commission) ? 0 : commission);
+  }, 0);
+  return Math.round((sum + Number.EPSILON) * 100) / 100;
+});
 </script>
 
 <template>
@@ -163,6 +171,11 @@ const resetFilters = () => {
         :total="filteredClientTrades.length"
       />
     </UCard>
+    <div class="dashboard__total">
+      <UCard class="dashboard__totalCard">
+        <p>Total Commission: {{ totalCommission }}</p>
+      </UCard>
+    </div>
   </UContainer>
 </template>
 
@@ -172,7 +185,7 @@ const resetFilters = () => {
 
 .dashboard__mainCard
   margin-top: 8rem
-  
+
 .dashboard__mainTable
   margin-top: 1rem
   margin-bottom: 1rem
@@ -211,4 +224,11 @@ const resetFilters = () => {
   display: flex
   padding-top: 1em
   justify-content: flex-end
+
+.dashboard__totalCard
+  padding: 1rem
+  margin-top: 2rem
+  border: 2px solid green
+  text-align: center
+  font-size: 1.3rem
 </style>
