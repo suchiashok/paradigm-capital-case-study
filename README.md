@@ -47,9 +47,9 @@ npm run dev
 ## Deployed App
 
 To view the deployed app, visit:
-(link goes here)
+(https://paradigm-capital-case-study.nuxt.dev/)
 
-For more details on deployment and production configurations, refer to the deployment documentation.
+For more details on deployment, refer to the [deployment documentation](docs/deployment.md).
 
 ## Process Optimization Proposal
 

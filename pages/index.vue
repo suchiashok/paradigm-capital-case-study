@@ -38,6 +38,12 @@ const goToTrades = () => {
           </UButton>
         </div>
       </div>
+      <div class="card-footer">
+        <p class="footer-text">
+          Made by Suchita Ashok | <br />
+          <a href="mailto:suchiashok.97@gmail.com">suchiashok.97@gmail.com</a>
+        </p>
+      </div>
     </UCard>
   </UContainer>
 </template>
@@ -59,7 +65,6 @@ const goToTrades = () => {
     min-height: 31.25rem
     background-color: #1e1e1e
     color: #ffffff
-    padding: 40px
     border-radius: 16px
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4)
 
@@ -87,4 +92,14 @@ const goToTrades = () => {
     justify-content: center
     gap: 20px
     padding-left: 20px
+
+.card-footer
+    margin-top: auto
+    font-size: 0.9em
+    color: #555
+
+.footer-text a
+    color: inherit
+    text-decoration: none
+    font-weight: bold
 </style>
