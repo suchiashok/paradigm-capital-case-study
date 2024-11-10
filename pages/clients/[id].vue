@@ -63,17 +63,15 @@ const filteredClientTrades = computed(() => {
       .toLowerCase()
       .includes(searchQuery.value.toLowerCase());
     const matchesSide = sideFilter.value
-      ? trade.side.toLowerCase() === 
-        sideFilter.value.toLowerCase()
+      ? trade.side.toLowerCase() === sideFilter.value.toLowerCase()
       : true;
     const matchesComm = commTypeFilter.value
-      ? trade.commission_type.toLowerCase() === 
+      ? trade.commission_type.toLowerCase() ===
         commTypeFilter.value.toLowerCase()
       : true;
     return matchesQuery && matchesSide && matchesComm;
   });
 });
-
 
 const rows = computed(() =>
   filteredClientTrades.value.slice(
@@ -92,7 +90,9 @@ const resetFilters = () => {
 <template>
   <UContainer style="margin-top: 2rem">
     <UCard>
-      <h2 class="dashboard__header">Trades of Client with ID - {{ clientTradeData[0].client }}</h2>
+      <h2 class="dashboard__header">
+        Trades of Client with ID - {{ clientTradeData[0].client }}
+      </h2>
       <!-- Filters -->
       <UCard class="dashboard__tableCard">
         <div class="dashboard__filters">
