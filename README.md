@@ -9,6 +9,12 @@ This project showcases a dashboard with various pages, including a **home page**
 
 - **Trade (`/trade`)**: The trade dashboard for viewing trade-related data.
 
+### Tech Stack 
+
+- Nuxt: The framework for the app
+- Nuxt UI: A library for building UI components
+- Chart.js: For rendering interactive charts in the trade dashboard
+
 ## Setup
 
 To run the project locally, follow these steps:
@@ -27,10 +33,6 @@ Make sure to install the necessary dependencies to get the app running.
 ```bash
 npm install
 ```
-
-Nuxt: The framework for the app
-Nuxt UI: A library for building UI components
-Chart.js: For rendering interactive charts in the trade dashboard
 
 ### Development Server
 
