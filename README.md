@@ -13,7 +13,7 @@ This project showcases a dashboard with various pages, including a **home page**
 
 - Nuxt: The framework for the app
 - Nuxt UI: A library for building UI components
-- Chart.js: For rendering interactive charts in the trade dashboard
+- Chart.js: For rendering interactive charts in the client dashboard
 
 ## Setup
 
