@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
-import { useFetch } from "#app";
+import { useFetch, useRouter } from "#app";
 
 const searchQuery = ref("");
 const quantityFilter = ref({ min: 0, max: Infinity });
@@ -27,11 +27,16 @@ const selectedQuantityRange = ref("");
 const selectedPriceRange = ref("");
 const selectedCommissionRange = ref("");
 
+const router = useRouter();
+const navigateHome = () => {
+  router.push("/");
+};
+
 const {
   data: tradeData,
   error,
   isFetching,
-} = await useFetch('/api/trades/list');
+} = await useFetch("/api/trades/list");
 
 const displayedColumns = [
   {
@@ -127,7 +132,14 @@ function updateCommissionFilter(label) {
   <div class="dashboard">
     <UContainer :style="{ margin: 0 }" class="dashboard__main">
       <h2 class="dashboard__header">Trades Dashboard</h2>
-
+      <div class="dashboard__homeButton">
+        <UButton
+          @click="navigateHome"
+          icon="oi:home"
+          color="green"
+          variant="outline"
+        />
+      </div>
       <!-- Filters -->
       <UCard class="dashboard__tableCard">
         <div class="dashboard__filters">
@@ -174,11 +186,7 @@ function updateCommissionFilter(label) {
         class="dashboard__mainTable"
         v-if="!isFetching && filteredTrades.length > 0"
       >
-        <UTable
-          :columns="displayedColumns"
-          :rows="rows"
-          class="w-full"
-        />
+        <UTable :columns="displayedColumns" :rows="rows" class="w-full" />
       </div>
 
       <!-- Display error message if there's an error -->
@@ -203,18 +211,23 @@ function updateCommissionFilter(label) {
 
 <style lang="sass" scoped>
 .dashboard
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
   border: 1px solid #00DC82
   border-radius: 12px
   padding: 20px
-  margin: 0.2rem
+  margin: 0
   display: flex
   flex-direction: column
   align-items: center
   justify-content: center
-  min-height: 100vh
+  overflow-y: auto
   box-sizing: border-box
 
-.dashboard__main 
+.dashboard__main
   flex: 1
   padding-top: 3rem
 
@@ -222,11 +235,17 @@ function updateCommissionFilter(label) {
   margin-top: 1rem
   margin-bottom: 1rem
 
+.dashboard__homeButton
+  position: absolute
+  top: 20px
+  right: 20px
+  z-index: 10
+
 .dashboard__header
   font: 2em sans-serif
   padding-bottom: 1rem
   text-align: center
-  margin-top: 0 
+  margin-top: 0
 
 .dashboard__filter
   width: 20%

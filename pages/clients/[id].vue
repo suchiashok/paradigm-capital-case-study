@@ -1,10 +1,16 @@
 <script setup>
+import { useRouter } from "#app";
 const route = useRoute();
 
 const id = parseInt(route.params.id);
 const searchQuery = ref("");
 const sideFilter = ref("");
 const commTypeFilter = ref("");
+
+const router = useRouter();
+const navigateHome = () => {
+  router.push("/");
+};
 
 const {
   data: clientTradeData,
@@ -86,8 +92,16 @@ const resetFilters = () => {
 </script>
 
 <template>
-  <UContainer style="margin-top: 2rem">
-    <UCard>
+  <UContainer style="margin-top: 2rem" class="dashboard">
+    <div class="dashboard__homeButton">
+      <UButton
+        @click="navigateHome"
+        icon="oi:home"
+        color="green"
+        variant="outline"
+      />
+    </div>
+    <UCard class="dashboard__mainCard">
       <h2 class="dashboard__header">
         Trades of Client with ID - {{ clientTradeData[0].client }}
       </h2>
@@ -154,10 +168,11 @@ const resetFilters = () => {
 
 <style lang="sass" scoped>
 .dashboard
-  border: 2px solid #00DC82
-  padding: 20px
-  width: 66%
+  width: 100vw
 
+.dashboard__mainCard
+  margin-top: 8rem
+  
 .dashboard__mainTable
   margin-top: 1rem
   margin-bottom: 1rem
@@ -166,6 +181,12 @@ const resetFilters = () => {
   font: 2em sans-serif
   padding-bottom: 1rem
   text-align: center
+
+.dashboard__homeButton
+  position: absolute
+  top: 20px
+  right: 20px
+  z-index: 10
 
 .dashboard__filter
   width: 20%

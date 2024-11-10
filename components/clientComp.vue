@@ -11,6 +11,9 @@ const router = useRouter();
 const navigateToClient = (clientId) => {
   router.push(`/clients/${clientId}`);
 };
+const navigateHome = () => {
+  router.push('/');
+};
 
 const {
   data: clientData,
@@ -147,7 +150,14 @@ const resetFilters = () => {
   <div class="dashboard">
     <UContainer :style="{ margin: 0 }">
       <h2 class="dashboard__header">Client Dashboard</h2>
-
+      <div class="dashboard__homeButton">
+        <UButton
+          @click="navigateHome"
+          icon="oi:home"
+          color="green"
+          variant="outline"
+        />
+      </div>
       <div class="dashboard__content">
         <div class="dashboard__tableSection">
           <!-- Filters -->
@@ -262,6 +272,12 @@ const resetFilters = () => {
   display: flex
   gap: 2rem
   flex-direction: column
+
+.dashboard__homeButton
+  position: absolute
+  top: 20px
+  right: 20px
+  z-index: 10
 
 .dashboard__mainTable
   margin-top: 1rem
