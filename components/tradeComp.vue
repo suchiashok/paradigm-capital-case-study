@@ -31,7 +31,7 @@ const {
   data: tradeData,
   error,
   isFetching,
-} = useFetch("https://paradigmapi.pythonanywhere.com/api/trades");
+} = await useFetch('/api/trades/list');
 
 const displayedColumns = [
   {

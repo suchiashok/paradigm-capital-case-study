@@ -1,7 +1,7 @@
 <script setup>
 const route = useRoute();
 
-const clientId = parseInt(route.params.id);
+const id = parseInt(route.params.id);
 const searchQuery = ref("");
 const sideFilter = ref("");
 const commTypeFilter = ref("");
@@ -10,9 +10,7 @@ const {
   data: clientTradeData,
   error,
   isFetching,
-} = useFetch(
-  `https://paradigmapi.pythonanywhere.com/api/clients/${clientId}/trades`
-);
+} = await useFetch(`/api/clients/${id}`);
 
 const displayedColumns = [
   {

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useFetch, useRouter } from "#app";
+import { Doughnut } from "vue-chartjs";
 
 const searchQuery = ref("");
 const riskProfileFilter = ref("");
@@ -11,11 +12,42 @@ const navigateToClient = (clientId) => {
   router.push(`/clients/${clientId}`);
 };
 
-const {
-  data: clientData,
-  error,
-  isFetching,
-} = useFetch("https://paradigmapi.pythonanywhere.com/api/clients");
+const { data: clientData, error, isFetching } = await useFetch("/api/clients/list");
+
+const clientChartdata = clientData?.value?.items || [];
+
+const lowCount = clientChartdata.filter((client) => {
+  if (client.risk_profile === "Low") {
+    return client;
+  }
+});
+
+const modCount = clientChartdata.filter((client) => {
+  if (client.risk_profile === "Moderate") {
+    return client;
+  }
+});
+
+const highCount = clientChartdata.filter((client) => {
+  if (client.risk_profile === "High") {
+    return client;
+  }
+});
+
+const chartData = {
+  labels: ["Low", "Moderate", "High"],
+  datasets: [
+    {
+      backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#DD1B16"],
+      data: [lowCount.length, modCount.length, highCount.length],
+    },
+  ],
+};
+
+const options = {
+  responsive: true,
+  maintainAspectRatio: false,
+};
 
 const displayedColumns = [
   {
@@ -129,11 +161,7 @@ const resetFilters = () => {
           />
         </div>
         <div class="dashboard__button">
-          <UButton
-            @click="resetFilters"
-            color="green"
-            variant="outline"
-          >
+          <UButton @click="resetFilters" color="green" variant="outline">
             Reset Filters
           </UButton>
         </div>
@@ -172,6 +200,12 @@ const resetFilters = () => {
         :page-count="pageCount"
         :total="filteredClients.length"
       />
+    </UContainer>
+  </div>
+  <div class="dashboard">
+    <h2>Risk Profile</h2>
+    <UContainer :style="{ margin: 0 }">
+      <Doughnut :data="chartData" :options="options" />
     </UContainer>
   </div>
 </template>
