@@ -1,75 +1,62 @@
-# Nuxt Minimal Starter
+# Paradigm Capital Case Study
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This project showcases a dashboard with various pages, including a **home page**, **client dashboard**, and **trade dashboard**. Below are the instructions for setting up the project locally, as well as details on the pages and features of the app.
+
+## Pages Overview
+
+- **Home (`/`)**: The main landing page that gives a brief overview of the application and provides navigation to other pages.
+- **Clients (`/clients`)**: The client dashboard that displays details for the clients, including relevant data visualization. The client page also allows navigation to individual client trade details through the path `/clients/{client_id}`, providing an overview of each client's trade activity.
+
+- **Trade (`/trade`)**: The trade dashboard for viewing trade-related data.
 
 ## Setup
 
-Make sure to install dependencies:
+To run the project locally, follow these steps:
 
 ```bash
-# npm
+git clone https://github.com/suchiashok/paradigm-capital-case-study.git
+cd paradigm-capital-case-study
+```
+
+### Install Dependencies
+
+Make sure to install the necessary dependencies to get the app running.
+
+#### For npm:
+
+```bash
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+### Install Nuxt, Nuxt UI, and Chart.js:
 
-Start the development server on `http://localhost:3000`:
+Make sure the following packages are installed:
+
+    •	Nuxt: The framework for the app
+    •	Nuxt UI: A library for building UI components
+    •	Chart.js: For rendering interactive charts in the trade dashboard
+
+To install these dependencies, you can add them to your project:
 
 ```bash
-# npm
+npm install nuxt nuxt-ui chart.js
+```
+
+### Development Server
+
+Once you’ve installed the dependencies, you can start the development server to preview the app locally.
+
+To run the app on http://localhost:3000, use the following commands:
+
+#### For npm:
+
+```bash
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+## Deployed App
 
-Build the application for production:
+To view the deployed app, visit:
+(link goes here)
 
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+For more details on deployment and production configurations, refer to the deployment documentation.
