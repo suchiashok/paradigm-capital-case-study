@@ -1,5 +1,5 @@
 <script>
-import TradeComp from "../components/trade-comp.vue";
+import TradeComp from "../components/TradeComp.vue";
 </script>
 
 <template>

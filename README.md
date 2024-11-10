@@ -28,13 +28,9 @@ Make sure to install the necessary dependencies to get the app running.
 npm install
 ```
 
-    Nuxt: The framework for the app
-    Nuxt UI: A library for building UI components
-    Chart.js: For rendering interactive charts in the trade dashboard
-
-```bash
-npm install nuxt nuxt-ui chart.js
-```
+Nuxt: The framework for the app
+Nuxt UI: A library for building UI components
+Chart.js: For rendering interactive charts in the trade dashboard
 
 ### Development Server
 

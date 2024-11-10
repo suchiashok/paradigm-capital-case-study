@@ -1,5 +1,5 @@
 <script>
-import ClientComp from "../components/client-comp.vue";
+import ClientComp from "../components/ClientComp.vue";
 </script>
 
 <template>
