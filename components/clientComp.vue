@@ -12,7 +12,7 @@ const navigateToClient = (clientId) => {
   router.push(`/clients/${clientId}`);
 };
 const navigateHome = () => {
-  router.push('/');
+  router.push("/");
 };
 
 const {
@@ -97,7 +97,7 @@ const displayedColumns = [
   },
   {
     key: "actions",
-    label: "Actions",
+    label: "View Trade Details",
     sortable: false,
   },
 ];
@@ -106,7 +106,7 @@ const actions = [
   [
     {
       key: "view",
-      label: "Action",
+      label: "View Trade Details",
       icon: "oi:account-login",
     },
   ],
@@ -148,8 +148,8 @@ const resetFilters = () => {
 
 <template>
   <div class="dashboard">
+    <h2 class="dashboard__header">Client Dashboard</h2>
     <UContainer :style="{ margin: 0 }">
-      <h2 class="dashboard__header">Client Dashboard</h2>
       <div class="dashboard__homeButton">
         <UButton
           @click="navigateHome"
@@ -203,7 +203,7 @@ const resetFilters = () => {
               <template #actions-data="{ row }">
                 <UButton
                   @click="navigateToClient(row.id)"
-                  icon="oi:account-login"
+                  icon="oi:graph"
                   color="emerald"
                   variant="outline"
                 />
@@ -260,7 +260,7 @@ const resetFilters = () => {
 
 .dashboard__content
   display: flex
-  gap: 2rem
+  gap: 5rem
   align-items: flex-start
 
 .dashboard__tableSection
@@ -285,7 +285,8 @@ const resetFilters = () => {
 
 .dashboard__header
   font: 2em sans-serif
-  padding-bottom: 1rem
+  margin-top: 1rem
+  margin-bottom: 4rem
   text-align: center
 
 .dashboard__filter
