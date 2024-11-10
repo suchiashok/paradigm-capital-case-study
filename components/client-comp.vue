@@ -47,7 +47,7 @@ const riskChartData = {
 };
 
 const tierChartData = {
-  labels: ["1", "2", "3", "4", "5"],
+  labels: ["Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5"],
   datasets: [
     {
       backgroundColor: ["#007A6E", "#38A169", "#1A202C", "#81E6D9", "#4A5568"],

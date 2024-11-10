@@ -1,6 +1,6 @@
 # Paradigm Capital Case Study
 
-This project showcases a dashboard with various pages, including a **home page**, **client dashboard**, and **trade dashboard**. Below are the instructions for setting up the project locally, as well as details on the pages and features of the app.
+This project showcases a dashboard with various pages, including a **home page**, **client dashboard**, **trade dashboard**, and **each client's individual trade details**. Below are the instructions for setting up the project locally, and instructions to view the deployed app.
 
 ## Pages Overview
 
@@ -28,15 +28,9 @@ Make sure to install the necessary dependencies to get the app running.
 npm install
 ```
 
-### Install Nuxt, Nuxt UI, and Chart.js:
-
-Make sure the following packages are installed:
-
-    •	Nuxt: The framework for the app
-    •	Nuxt UI: A library for building UI components
-    •	Chart.js: For rendering interactive charts in the trade dashboard
-
-To install these dependencies, you can add them to your project:
+    Nuxt: The framework for the app
+    Nuxt UI: A library for building UI components
+    Chart.js: For rendering interactive charts in the trade dashboard
 
 ```bash
 npm install nuxt nuxt-ui chart.js
@@ -60,3 +54,9 @@ To view the deployed app, visit:
 (link goes here)
 
 For more details on deployment and production configurations, refer to the deployment documentation.
+
+## Process Optimization Proposal
+
+View the [Process Optimization Proposal](docs/Process%20Optimization%20Proposal.pdf) here.
+
+

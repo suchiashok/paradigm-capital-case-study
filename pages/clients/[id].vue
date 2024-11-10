@@ -228,6 +228,7 @@ const totalCommission = computed(() => {
 .dashboard__totalCard
   padding: 1rem
   margin-top: 2rem
+  margin-bottom: 5rem
   border: 2px solid green
   text-align: center
   font-size: 1.3rem
