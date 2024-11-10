@@ -125,7 +125,7 @@ function updateCommissionFilter(label) {
 
 <template>
   <div class="dashboard">
-    <UContainer :style="{ margin: 0 }">
+    <UContainer :style="{ margin: 0 }" class="dashboard__main">
       <h2 class="dashboard__header">Trades Dashboard</h2>
 
       <!-- Filters -->
@@ -203,9 +203,20 @@ function updateCommissionFilter(label) {
 
 <style lang="sass" scoped>
 .dashboard
-  border: 2px solid #00DC82
+  border: 1px solid #00DC82
+  border-radius: 12px
   padding: 20px
-  width: 66%
+  margin: 0.2rem
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  min-height: 100vh
+  box-sizing: border-box
+
+.dashboard__main 
+  flex: 1
+  padding-top: 3rem
 
 .dashboard__mainTable
   margin-top: 1rem
@@ -215,6 +226,7 @@ function updateCommissionFilter(label) {
   font: 2em sans-serif
   padding-bottom: 1rem
   text-align: center
+  margin-top: 0 
 
 .dashboard__filter
   width: 20%
