@@ -110,6 +110,9 @@ const resetFilters = () => {
   selectedQuantityRange.value = "";
   selectedPriceRange.value = "";
   selectedCommissionRange.value = "";
+  quantityFilter.value = { min: 0, max: Infinity };
+  priceFilter.value = { min: 0, max: Infinity };
+  commissionFilter.value = { min: 0, max: Infinity };
 };
 
 function updateQuantityFilter(label) {
