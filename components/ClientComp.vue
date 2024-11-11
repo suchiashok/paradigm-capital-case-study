@@ -15,6 +15,7 @@ const navigateHome = () => {
   router.push("/");
 };
 
+//Fetch client data from API
 const {
   data: clientData,
   error,
@@ -32,6 +33,7 @@ function getClientCountByTier(profile) {
   return clientChartdata.filter((client) => client.tier === profile).length;
 }
 
+//Chart data for risk profile distribution
 const riskChartData = {
   labels: ["Low", "Moderate", "High"],
   datasets: [
@@ -46,6 +48,7 @@ const riskChartData = {
   ],
 };
 
+//Chart data for client tier analysis
 const tierChartData = {
   labels: ["Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5"],
   datasets: [
@@ -67,6 +70,7 @@ const options = {
   maintainAspectRatio: false,
 };
 
+//Columns to display
 const displayedColumns = [
   {
     key: "id",
@@ -112,9 +116,11 @@ const actions = [
   ],
 ];
 
+//pagination settings
 const page = ref(1);
 const pageCount = 5;
 
+//computed filtered list of clients
 const filteredClients = computed(() => {
   return clientData.value?.items.filter((client) => {
     const matchesQuery = client.company_name
@@ -132,6 +138,7 @@ const filteredClients = computed(() => {
   });
 });
 
+//Pagination logic
 const rows = computed(() =>
   filteredClients.value.slice(
     (page.value - 1) * pageCount,

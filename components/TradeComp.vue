@@ -6,6 +6,8 @@ const searchQuery = ref("");
 const quantityFilter = ref({ min: 0, max: Infinity });
 const priceFilter = ref({ min: 0, max: Infinity });
 const commissionFilter = ref({ min: 0, max: Infinity });
+
+//Predefined ranges for filters
 const quantityRanges = [
   { label: "<1000", min: 0, max: 999 },
   { label: "1000-1999", min: 1000, max: 1999 },
@@ -32,12 +34,14 @@ const navigateHome = () => {
   router.push("/");
 };
 
+//Fetch client data from API
 const {
   data: tradeData,
   error,
   isFetching,
 } = await useFetch("/api/trades/list");
 
+//Columns to display
 const displayedColumns = [
   {
     key: "id",
@@ -75,9 +79,11 @@ const displayedColumns = [
   },
 ];
 
+//pagination settings
 const page = ref(1);
 const pageCount = 5;
 
+//computed filtered list of trades
 const filteredTrades = computed(() => {
   return tradeData?.value?.items.filter((trade) => {
     const matchesQuery = trade.ticker
@@ -98,6 +104,7 @@ const filteredTrades = computed(() => {
   });
 });
 
+//pagination logic
 const rows = computed(() =>
   filteredTrades.value.slice(
     (page.value - 1) * pageCount,
@@ -115,6 +122,7 @@ const resetFilters = () => {
   commissionFilter.value = { min: 0, max: Infinity };
 };
 
+//functions to update filter values based on selected ranges
 function updateQuantityFilter(label) {
   const range = quantityRanges.find((r) => r.label === label);
   quantityFilter.value = range || { min: 0, max: Infinity };
